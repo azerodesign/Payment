@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AzeroPayment</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com "></script>
+  
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css " />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+
+  <!-- Internal CSS -->
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .glass {
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .bg-dark {
+      background: linear-gradient(-45deg, #0f172a, #1e3a8a, #0ea5e9, #1e3a8a);
+      background-size: 400% 400%;
+      animation: gradientMove 40s ease infinite;
+    }
+
+    .bg-light {
+      background: linear-gradient(-45deg, #e0f2fe, #bfdbfe, #93c5fd, #bfdbfe);
+      background-size: 400% 400%;
+      animation: gradientMove 40s ease infinite;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 0px rgba(0, 176, 255, 0); }
+      50% { box-shadow: 0 0 25px rgba(0, 176, 255, 0.6); }
+    }
+
+    .glow-logo {
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    .shape-decor {
+      position: absolute;
+      border-radius: 9999px;
+      filter: blur(120px);
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    .shape-top {
+      top: -60px;
+      left: -60px;
+      width: 300px;
+      height: 300px;
+      background: #0ea5e9;
+    }
+
+    .shape-bottom {
+      bottom: -60px;
+      right: -60px;
+      width: 300px;
+      height: 300px;
+      background: #1e3a8a;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .animate-fade-in-down {
+      animation: fade-in-down 0.3s ease-out;
+    }
+
+    @keyframes fade-in-down {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen transition-colors duration-700 bg-light text-gray-800 dark:bg-dark dark:text-white">
+  <!-- Shape Decorations -->
+  <div class="shape-decor shape-top"></div>
+  <div class="shape-decor shape-bottom"></div>
+
+  <!-- Lock Screen Overlay -->
+  <div id="lockScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center backdrop-blur-sm bg-black/60 text-white text-center p-4">
+    <img src=" https://cdn-icons-png.flaticon.com/512/565/565655.png " alt="Locked" class="w-20 h-20 mb-4 opacity-80">
+    <p class="text-lg font-semibold mb-2">Website ini terkunci 🔒</p>
+    <p class="text-sm mb-4">Tanya <strong>Azero</strong> untuk mendapatkan akses kodenya.</p>
+    <input type="text" id="accessCode" placeholder="Masukkan kode di sini..." maxlength="4"
+           class="px-4 py-2 rounded-lg text-black mb-2 w-64 max-w-full text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <button onclick="verifyCode()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-black">
+      Unlock
+    </button>
+    <p id="codeError" class="text-red-400 text-sm mt-2 hidden">Kode salah atau tidak dikenal ❌</p>
+  </div>
+
+  <!-- Main Content -->
+  <div id="page" class="container mx-auto px-4 py-8 relative z-10">
+    <!-- Toggle Button -->
+    <div class="mb-6 self-end">
+      <button onclick="toggleMode()" class="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm font-medium backdrop-blur-sm transition-colors duration-300">
+        🌓 Toggle Light/Dark
+      </button>
+    </div>
+
+    <!-- Header -->
+    <div class="glass p-6 rounded-3xl w-full max-w-2xl shadow-lg text-center mb-10 bg-white/60 dark:bg-white/10 mx-auto">
+      <img src="https://files.catbox.moe/0er4p3.png " alt="Logo" class="w-20 h-20 rounded-full mx-auto glow-logo mb-3">
+      <h1 class="text-4xl font-extrabold">AzeroPayment</h1>
+      <p class="text-gray-700 dark:text-white/80 text-sm">Your Digital Payment Hub</p>
+      <div class="mt-4">
+        <a href="https://wa.me/62895403246379 " target="_blank">
+          <img src="https://files.catbox.moe/40b45r.png " alt="WA" class="w-12 h-12 mx-auto hover:scale-110 transition-transform duration-300"/>
+        </a>
+      </div>
+    </div>
+
+    <!-- Payment Section -->
+    <section class="glass p-6 rounded-3xl w-full max-w-2xl shadow-md space-y-4 bg-white/60 dark:bg-white/10 mx-auto">
+      <div class="text-center mb-4">
+        <h2 class="text-2xl font-semibold">Choose a Payment Method</h2>
+      </div>
+      <div class="flex items-center gap-4 p-4 rounded-2xl hover:scale-105 transition-all duration-300 bg-white/80 dark:bg-white/10 border border-white/20">
+        <div class="w-10 h-10 rounded-lg overflow-hidden bg-white/30 flex items-center justify-center">
+          <img src="https://files.catbox.moe/0lbzhk.png " alt="Dana Logo" class="object-contain w-full h-full">
+        </div>
+        <div class="flex-1 text-left">
+          <div class="text-blue-600 dark:text-blue-200 font-semibold">Dana</div>
+          <div id="dana" class="text-sm font-mono">0851-8318-0486</div>
+        </div>
+        <button onclick="copyToClipboard('dana')" class="text-sm text-blue-700 dark:text-white hover:underline transition-colors duration-300">Copy</button>
+      </div>
+      <div class="flex items-center gap-4 p-4 rounded-2xl hover:scale-105 transition-all duration-300 bg-white/80 dark:bg-white/10 border border-white/20">
+        <div class="w-10 h-10 rounded-lg overflow-hidden bg-white/30 flex items-center justify-center">
+          <img src="https://files.catbox.moe/udovzy.png " alt="Gopay Logo" class="object-contain w-full h-full">
+        </div>
+        <div class="flex-1 text-left">
+          <div class="text-green-600 dark:text-green-200 font-semibold">Gopay</div>
+          <div id="gopay" class="text-sm font-mono">0851-8318-0486</div>
+        </div>
+        <button onclick="copyToClipboard('gopay')" class="text-sm text-green-700 dark:text-white hover:underline transition-colors duration-300">Copy</button>
+      </div>
+      <div class="text-center p-5 rounded-2xl hover:scale-105 transition-all duration-300 bg-white/80 dark:bg-white/10 border border-white/20">
+        <div class="flex justify-center items-center gap-2 mb-2">
+          <i class="fa-solid fa-qrcode"></i>
+          <span class="font-semibold">QRIS (Universal)</span>
+        </div>
+        <img src="https://files.catbox.moe/j1pnjf.PNG " class="rounded-lg mx-auto border border-white/20 max-w-[200px]" alt="QRIS Code">
+        <p class="text-xs text-gray-600 dark:text-white/70 mt-2">Scan using Dana, Gopay, OVO, etc.</p>
+      </div>
+    </section>
+
+    <!-- Notification -->
+    <div id="notif" class="mt-4 text-green-600 dark:text-green-300 text-sm text-center font-medium hidden">✅ Copied to clipboard!</div>
+
+    <!-- Extra Links -->
+    <div class="mt-8 text-sm text-center text-gray-800 dark:text-gray-200">
+      Mau liat <a href="#" class="underline font-semibold hover:text-blue-500">Portofolio</a> Azero?, atau mau cek <a href="#" class="underline font-semibold hover:text-blue-500">Bussiness</a> nya?
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-6 text-sm text-gray-700 dark:text-white/60 text-center">&copy; 2025 AzeroPayment — Payments made easy</footer>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    const validCodes = ["2024", "3102", "4306", "3235", "6924", "6646", "8943", "6143",
+                        "2300", "6284", "3446", "4501", "9217", "7272", "3823", "6712",
+                        "4718", "6541", "2939", "9451", "4664"];
+
+    function toggleMode() {
+      const page = document.getElementById('page');
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        page.classList.remove('bg-dark');
+        page.classList.add('bg-light', 'text-gray-800');
+      } else {
+        document.documentElement.classList.add('dark');
+        page.classList.add('bg-dark');
+        page.classList.remove('bg-light', 'text-gray-800');
+      }
+    }
+
+    function verifyCode() {
+      const input = document.getElementById('accessCode').value.trim();
+      const errorMsg = document.getElementById('codeError');
+      const lockScreen = document.getElementById('lockScreen');
+
+      if (validCodes.includes(input)) {
+        lockScreen.style.display = 'none';
+        document.documentElement.classList.remove('dark');
+        document.getElementById('page').classList.remove('bg-dark');
+        document.getElementById('page').classList.add('bg-light', 'text-gray-800');
+      } else {
+        errorMsg.classList.remove('hidden');
+        errorMsg.classList.add('animate-fade-in-down');
+        setTimeout(() => {
+          errorMsg.classList.add('hidden');
+          errorMsg.classList.remove('animate-fade-in-down');
+        }, 2000);
+      }
+    }
+
+    function copyToClipboard(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const notif = document.getElementById('notif');
+        notif.classList.remove('hidden');
+        notif.classList.add('opacity-100');
+        setTimeout(() => {
+          notif.classList.remove('opacity-100');
+          notif.classList.add('opacity-0');
+          setTimeout(() => {
+            notif.classList.add('hidden');
+          }, 300);
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
